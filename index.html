@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
+    <title>AES Cryptosystem</title>
+</head>
+<body>
+    <h1>AES Cryptosystem</h1>
+
+    <h2>AES Encryption</h2>
+    <div>
+        <label for="plaintext">plaintext:</label>
+        <input type="text" id="plaintext" placeholder="Please enter string">
+        <br>
+        <label for="key">key:</label>
+        <input type="text" id="key" placeholder="Please Enter your Hexadecimal">
+        <br>
+        <button onclick="encrypt()">Encrypt</button>
+    </div>
+    <div>
+        <label for="encrypted">Encrypted result:</label>
+        <textarea id="encrypted" rows="4" cols="50" readonly></textarea>
+    </div>
+
+    <h2>AES Decryption</h2>
+    <div>
+        <label for="ciphertext">ciphertext:</label>
+        <input type="text" id="ciphertext" placeholder="Please enter encrypted result">
+        <br>
+        <label for="decryptKey">key:</label>
+        <input type="text" id="decryptKey" placeholder="Please Enter your Hexadecimal">
+        <br>
+        <button onclick="decrypt()">Decrypt</button>
+    </div>
+    <div>
+        <label for="decrypted">Decrypted result:</label>
+        <textarea id="decrypted" rows="4" cols="50" readonly></textarea>
+    </div>
+    <script>
+    function encrypt() {
+      var plaintext = document.getElementById("plaintext").value;
+      var key = document.getElementById("key").value;
+      var encryptedText = CryptoJS.AES.encrypt(plaintext, key, { keySize: 256 });
+      var hex='';
+      var str = encryptedText.toString(); // Convert object to string
+      for (var i=0; i<str.length;i++)
+      {
+          var hexchar = str.charCodeAt(i).toString(16); // Corrected line
+          hex +=(hexchar.length===1?'0'+hexchar:hexchar);
+      }
+      document.getElementById("encrypted").innerHTML = hex.toUpperCase();
+    }
+
+    function decrypt() {
+      var ciphertext = document.getElementById("ciphertext").value;
+      var ascii='';
+      for (var i=0; i<ciphertext.length;i+=2)
+      {
+          ascii += String.fromCharCode(parseInt(ciphertext.substr(i,2),16)); // Corrected line
+      }
+      var key = document.getElementById("decryptKey").value;
+      var decryptedText = CryptoJS.AES.decrypt(ascii, key, { keySize: 256 });
+      document.getElementById("decrypted").innerHTML = decryptedText.toString(CryptoJS.enc.Utf8);
+    }
+    </script>
+</body>
+</html>
